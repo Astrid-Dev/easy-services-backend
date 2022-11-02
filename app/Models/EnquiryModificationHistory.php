@@ -5,15 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Enquiry extends Model
+class EnquiryModificationHistory extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'author',
         'code',
-        'address',
-        'latitude',
-        'longitude',
         'user_intervention_date',
         'user_price',
         'provider_intervention_date',
@@ -34,11 +32,6 @@ class Enquiry extends Model
     public function service_provider()
     {
         return $this->belongsTo(ServiceProvider::class);
-    }
-
-    public function answers()
-    {
-        return $this->hasOne(Answer::class);
     }
 
     public function service()

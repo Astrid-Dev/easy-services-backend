@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEnquiriesTable extends Migration
+class CreateEnquiryModificationHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateEnquiriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('enquiries', function (Blueprint $table) {
+        Schema::create('enquiry_modification_histories', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
-            $table->string('address');
-            $table->decimal('latitude');
-            $table->decimal('longitude');
+            $table->string('author');
+            $table->string('code');
             $table->string('user_intervention_date');
             $table->string('user_price')->nullable();
             $table->string('provider_intervention_date')->nullable();
@@ -56,6 +54,6 @@ class CreateEnquiriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('enquiries');
+        Schema::dropIfExists('enquiry_modification_histories');
     }
 }

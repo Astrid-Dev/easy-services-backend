@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHabitationsTable extends Migration
+class CreateAnswersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,17 @@ class CreateHabitationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('habitations', function (Blueprint $table) {
+        Schema::create('answers', function (Blueprint $table) {
             $table->id();
-            $table->string('label');
-            $table->string('label_en')->nullable();
+            $table->text('content');
             $table->timestamps();
+
+            $table->unsignedBigInteger('enquiry_id');
+
+            $table->foreign('enquiry_id')
+                ->references('id')
+                ->on('enquiries')
+                ->onDelete('cascade');
         });
     }
 
@@ -28,6 +34,6 @@ class CreateHabitationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('habitations');
+        Schema::dropIfExists('answers');
     }
 }

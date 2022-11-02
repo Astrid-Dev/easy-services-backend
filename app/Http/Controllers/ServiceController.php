@@ -6,6 +6,7 @@ use App\Models\Service;
 use App\Http\Requests\StoreServiceRequest;
 use App\Http\Requests\UpdateServiceRequest;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Request;
 
 class ServiceController extends Controller
 {
@@ -14,9 +15,16 @@ class ServiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $services_list = Service::paginate();
+        $services_list = null;
+
+        if($request->retrieve_all){
+            $services_list = Service::all();
+        }
+        else{
+            $services_list = Service::paginate();
+        }
 
         return Response(json_encode($services_list));
     }
