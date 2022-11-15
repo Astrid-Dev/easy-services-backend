@@ -27,6 +27,7 @@ class UserAuthController extends Controller
     	$validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|string|between:6,20',
+            'device_token' => 'sometimes|string'
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);

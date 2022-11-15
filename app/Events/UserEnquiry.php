@@ -10,6 +10,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use PushNotification;
 
 class UserEnquiry implements ShouldBroadCast
 {
@@ -24,6 +25,7 @@ class UserEnquiry implements ShouldBroadCast
      */
     public function __construct($notification)
     {
+        PushNotification::sendNotification($notification);
         $this->notification = $notification;
     }
 

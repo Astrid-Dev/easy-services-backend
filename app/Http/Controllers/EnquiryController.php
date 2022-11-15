@@ -54,6 +54,10 @@ class EnquiryController extends Controller
             $enquiries_list = $enquiries_list->whereIn('state', explode(',', $request->states));
         }
 
+        if(isset($request->services) && $request->services !== ''){
+            $enquiries_list = $enquiries_list->whereIn('service_id', explode(',', $request->services));
+        }
+
         if(isset($request->order_by) || isset($request->order_direction)){
             $order_by = isset($request->order_by) ? $request->order_by : 'created_at';
             $order_direction = isset($request->order_direction) ? $request->order_direction : 'desc';

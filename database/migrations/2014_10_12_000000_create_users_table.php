@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('email');
             $table->string('profile')->nullable();
             $table->string('password');
+            $table->string('device_token');
             $table->timestamps();
         });
     }

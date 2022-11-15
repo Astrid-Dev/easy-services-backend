@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Service;
+use App\Models\Enquiry;
 use App\Http\Requests\StoreServiceRequest;
 use App\Http\Requests\UpdateServiceRequest;
 use Illuminate\Support\Facades\Validator;
@@ -24,6 +25,12 @@ class ServiceController extends Controller
         }
         else{
             $services_list = Service::paginate();
+        }
+
+        if($request->show_totals){
+            foreach($services_list as $service){
+                $service->total = Enquiry::where('service_id', $service->id)->get()->count();
+            }
         }
 
         return Response(json_encode($services_list));
