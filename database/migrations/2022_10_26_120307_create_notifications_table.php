@@ -20,11 +20,23 @@ class CreateNotificationsTable extends Migration
             $table->boolean('is_read')->default(false);
             $table->timestamps();
 
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('provider_id')->nullable();
+            $table->unsignedBigInteger('organization_id')->nullable();
 
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
+                ->onDelete('cascade');
+            
+            $table->foreign('provider_id')
+                ->references('id')
+                ->on('providers')
+                ->onDelete('cascade');
+            
+            $table->foreign('organization_id')
+                ->references('id')
+                ->on('organizations')
                 ->onDelete('cascade');
         });
     }

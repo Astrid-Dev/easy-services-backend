@@ -14,7 +14,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use PushNotification;
 
-class ProviderRequest implements ShouldBroadCast
+class OrganizationRequest implements ShouldBroadCast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -43,6 +43,6 @@ class ProviderRequest implements ShouldBroadCast
 
     public function broadcastAs()
     {
-        return 'provider-request-'.$this->notification->provider_id;
+        return 'organization-request-'.$this->notification->organization_id;
     }
 }

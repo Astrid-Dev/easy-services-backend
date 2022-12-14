@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrganizationRequest;
 use App\Events\ProviderRequest;
 use App\Events\UserEnquiry;
 use App\Models\Enquiry;
@@ -9,10 +10,13 @@ use App\Models\Answer;
 use App\Events\Notifications;
 use App\Models\ServiceProviderApplication;
 use App\Models\ServiceProvider;
+use App\Models\OrganizationApplication;
+use App\Models\Organization;
 use App\Http\Requests\StoreEnquiryRequest;
 use App\Http\Requests\UpdateEnquiryRequest;
 use App\Models\EnquiryModificationHistory;
 use App\Models\Notification;
+use App\Models\ProviderReviewHistory;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
@@ -48,6 +52,18 @@ class EnquiryController extends Controller
             })
             ->where('user_id', '!=', $provider->user_id)
             ->whereIn('service_id', $provider_services);
+        }
+        else if(isset($request->organization_id)){
+            $organization = Organization::findOrFail($request->organization_id);
+            $organization_services = OrganizationApplication::where('organization_id', $request->organization_id)->get('service_id');
+            $organization_employees = ServiceProvider::where('organization_id', $request->organization_id)->get('id');
+            $enquiries_list = $enquiries_list->where(function($query) {
+                global $request;
+                global $organization_employees;
+                $query->whereIn('service_provider_id', $organization_employees ?? [])
+                      ->orWhereNull('service_provider_id');
+            })
+            ->whereIn('service_id', $organization_services);
         }
 
         if(isset($request->states) && $request->states !== ''){
@@ -200,6 +216,10 @@ class EnquiryController extends Controller
         $searched_enquiry = Enquiry::findOrFail($id);
 
         $concerned_provider_id = $searched_enquiry->service_provider_id;
+        $concerned_organization_id = null;
+        $concerned_user_id = $searched_enquiry->user_id;
+        $previous_state = $searched_enquiry->state;
+        $previous_provider_id = $searched_enquiry->service_provider_id;
 
         $request->validate([
             'address' => 'sometimes|string|max:255',
@@ -216,7 +236,7 @@ class EnquiryController extends Controller
             'answers' => 'sometimes|string',
             'user_id' => 'sometimes|integer',
             'service_provider_id' => 'sometimes|integer|nullable',
-            'is_provider' => 'sometimes|boolean'
+            'author' => 'sometimes|string'
         ]);
 
         $searched_enquiry->address = $request->address ? $request->address : $searched_enquiry->address;
@@ -234,24 +254,31 @@ class EnquiryController extends Controller
 
 
 
-        $user_id = $searched_enquiry->user_id;
+        $user_id_for_notification = $searched_enquiry->user_id;
+        $provider_id_for_notification = null;
+        $organization_id_for_notification = null;
 
-        if(!$request->is_provider){
-            $temp = ServiceProvider::find($concerned_provider_id);
-            $user_id = $temp ? $temp->user_id : null;
-        }
+        $action_author = $request->author ?? null;
 
         if($request->service_provider_id && $concerned_provider_id !== $request->service_provider_id){
             $concerned_provider_id = $request->service_provider_id;
         }
+
+        $temp = ServiceProvider::find($concerned_provider_id);
+        $concerned_organization_id = $temp ? $temp->organization_id : null;
         $data = new stdClass();
         $data->state = $searched_enquiry->state;
         $data->enquiry_code = $searched_enquiry->code;
 
+        $notif = null;
+
         $searched_enquiry->save();
 
+        $new_provider_id = $searched_enquiry->service_provider_id;
+        $new_state = $searched_enquiry->state;
+
         EnquiryModificationHistory::create([
-            'author' => (isset($request->is_provider) && $request->is_provider === true) ? ('provider') : ((isset($request->is_provider) && $request->is_provider === false) ? ('user') : ''),
+            'author' => $action_author,
             'code' => $searched_enquiry->code,
             'user_intervention_date' => $searched_enquiry->user_intervention_date,
             'user_price' => $searched_enquiry->user_price,
@@ -265,30 +292,84 @@ class EnquiryController extends Controller
             'service_provider_id' => $concerned_provider_id
         ]);
 
-        $elt = null;
-        if(isset($request->is_provider) && $request->is_provider === false){
-            $elt = Notification::create([
-                'user_id' => $user_id,
+        if($searched_enquiry->state === 4 && $request->provider_rate){
+            ProviderReviewHistory::create([
+                'provider_id' => $searched_enquiry->provider_id,
+                'user' => $searched_enquiry->user_id,
+                'review' => $request->provider_rate,
+                'enquiry_id' => $searched_enquiry->id
+            ]);
+        }
+
+        if(($previous_provider_id !== null && $new_provider_id !== null) && ($previous_provider_id !== $new_provider_id)){
+            $data->access = 'enabled';
+
+            $notif = Notification::create([
+                'provider_id' => $new_provider_id,
                 'reason' => 'provider-request',
                 'data' => json_encode($data)
             ]);
 
-            event(new ProviderRequest($elt));
-        }
-        else if (isset($request->is_provider) && $request->is_provider === true){
-            $elt = Notification::create([
-                'user_id' => $user_id,
-                'reason' => 'user-enquiry',
+            event(new ProviderRequest($notif));
+            
+            ///////////////////////////
+            $data->access = 'disabled';
+
+            $notif = Notification::create([
+                'provider_id' => $previous_provider_id,
+                'reason' => 'provider-request',
                 'data' => json_encode($data)
             ]);
 
-            event(new UserEnquiry($elt));
+            event(new ProviderRequest($notif));
+        }
+        else if($concerned_provider_id !== null && ($new_state !== $previous_state)){
+            if($action_author === 'organization' || $action_author === 'provider'){
+                $data->access = 'enabled';
+                $notif = Notification::create([ 
+                    'user_id' => $concerned_user_id,
+                    'reason' => 'user-enquiry',
+                    'data' => json_encode($data)
+                ]);
+    
+                event(new UserEnquiry($notif));
+            }
+            else if($action_author === 'customer'){
+                if($concerned_organization_id !== null){
+                    $notif = Notification::create([
+                        'organization_id' => $concerned_organization_id,
+                        'reason' => 'organization-request',
+                        'data' => json_encode($data)
+                    ]);
+        
+                    event(new OrganizationRequest($notif));
+                }
+                else{
+                    $notif = Notification::create([
+                        'provider_id' => $concerned_organization_id,
+                        'reason' => 'provider-request',
+                        'data' => json_encode($data)
+                    ]);
+        
+                    event(new ProviderRequest($notif));
+                }
+            }
         }
 
+        $service = Service::find($searched_enquiry->service_id);
+        $service->parent = Service::find($service->parent_id);
+        $searched_enquiry->service = $service;
+        $searched_enquiry->user = $searched_enquiry->load('user');
+        $searched_enquiry->answers = $searched_enquiry->load('answers');
+        $provider = ServiceProvider::find($searched_enquiry->service_provider_id);
+        if($provider){
+            $provider->user = $provider->load('user');
+        }
+        $searched_enquiry->service_provider = $provider;
+        
         return Response(json_encode([
             'message' => 'Enquiry updated successfully !',
             'enquiry' => $searched_enquiry,
-            'temp' => $user_id
         ]), 201);
     }
 

@@ -5,13 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ServiceProvider extends Model
+class ProviderReviewHistory extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
-        'organization_id'
+        'enquiry_id',
+        'provider_id',
+        'review'
     ];
 
     public function user()
@@ -19,14 +21,14 @@ class ServiceProvider extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function organization()
+    public function provider()
     {
-        return $this->belongsTo(Organization::class);
+        return $this->belongsTo(ServiceProvider::class);
     }
 
-    public function applications()
+    public function enquiry()
     {
-        return $this->hasMany(ServiceProviderApplication::class);
+        return $this->belongsTo(Enquiry::class);
     }
 
 }

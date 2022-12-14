@@ -50,6 +50,16 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+        'provider' => [
+            'driver' => 'jwt',
+            'provider' => 'users',
+            'hash' => false,
+        ],
+        'organization' => [
+            'driver' => 'jwt',
+            'provider' => 'users',
+            'hash' => false,
+        ],
     ],
 
     /*

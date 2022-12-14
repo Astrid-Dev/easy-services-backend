@@ -72,85 +72,113 @@ class CreateServicesTable extends Migration
                 "parent_id" => 1,
                 "illustration" => "images/cleaning.png",
                 'label' => "Assainissement antiviral",
-                "label_en" => 'Antiviral sanitization'
+                "label_en" => 'Antiviral sanitization',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 1,
                 "illustration" => "images/cleaning.png",
                 'label' => "Nettoyage de fenêtre",
-                "label_en" => 'Window cleaning'
+                "label_en" => 'Window cleaning',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 1,
                 "illustration" => "images/cleaning.png",
                 'label' => "Nettoyage régulier",
-                "label_en" => 'Regular cleaning'
+                "label_en" => 'Regular cleaning',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 1,
                 "illustration" => "images/cleaning.png",
                 'label' => "Nettoyage de fin de bail",
-                "label_en" => 'End of lease cleaning'
+                "label_en" => 'End of lease cleaning',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 1,
                 "illustration" => "images/cleaning.png",
                 'label' => "Nettoyage de printemps",
-                "label_en" => 'Spring cleaning'
+                "label_en" => 'Spring cleaning',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 1,
                 "illustration" => "images/cleaning.png",
                 'label' => "Nettoyage four/barbecue",
-                "label_en" => 'Oven/BBQ Cleaning'
+                "label_en" => 'Oven/BBQ Cleaning',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 1,
                 "illustration" => "images/cleaning.png",
                 'label' => "Nettoyage de matelas",
-                "label_en" => 'Mattress cleaning'
+                "label_en" => 'Mattress cleaning',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 1,
                 "illustration" => "images/cleaning.png",
                 'label' => "Nettoyage de carreaux et joints",
-                "label_en" => 'Tiles & Grout cleaning'
+                "label_en" => 'Tiles & Grout cleaning',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 1,
                 "illustration" => "images/cleaning.png",
                 'label' => "Sellerie véhicule",
-                "label_en" => 'Vehicle upholstery'
+                "label_en" => 'Vehicle upholstery',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 1,
                 "illustration" => "images/cleaning.png",
                 'label' => "Nettoyage de tissus d'ameublement",
-                "label_en" => 'Upholstery cleaning'
+                "label_en" => 'Upholstery cleaning',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 1,
                 "illustration" => "images/cleaning.png",
                 'label' => "Nettoyage à pression",
-                "label_en" => 'Pressure cleaning'
+                "label_en" => 'Pressure cleaning',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 1,
                 "illustration" => "images/cleaning.png",
                 'label' => "Nettoyage des constructeurs",
-                "label_en" => 'Builders cleaning'
+                "label_en" => 'Builders cleaning',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 1,
                 "illustration" => "images/cleaning.png",
                 'label' => "Nettoyage de moquette/tapis",
-                "label_en" => 'Carpet/Rug cleaning'
+                "label_en" => 'Carpet/Rug cleaning',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 1,
                 "illustration" => "images/cleaning.png",
                 'label' => "Nettoyage de gouttière",
-                "label_en" => 'Gutter cleaning'
+                "label_en" => 'Gutter cleaning',
+                "description" => null,
+                "description_en" => null
             ],
 
 
@@ -158,76 +186,100 @@ class CreateServicesTable extends Migration
                 "parent_id" => 2,
                 "illustration" => "images/plant-pot.png",
                 'label' => "Entretien du jardin",
-                "label_en" => 'Garden maintenance'
+                "label_en" => 'Garden maintenance',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 2,
                 "illustration" => "images/plant-pot.png",
                 'label' => "Tonte de la pelouse",
-                "label_en" => 'Lawn mowing'
+                "label_en" => 'Lawn mowing',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 2,
                 "illustration" => "images/plant-pot.png",
                 'label' => "Lavage à pression",
-                "label_en" => 'Pressure washing'
+                "label_en" => 'Pressure washing',
+                "description" => null,
+                "description_en" => null
             ],
 
             [
                 "parent_id" => 3,
                 "illustration" => "images/bug-spray.png",
                 'label' => "Infestation d'insectes",
-                "label_en" => 'Insect infestation'
+                "label_en" => 'Insect infestation',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 3,
                 "illustration" => "images/bug-spray.png",
                 'label' => "Infestation de rongeurs",
-                "label_en" => 'Rodent infestation'
+                "label_en" => 'Rodent infestation',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 3,
                 "illustration" => "images/bug-spray.png",
                 'label' => "Forfait emménagement/déménagement",
-                "label_en" => 'Move in/out package'
+                "label_en" => 'Move in/out package',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 3,
                 "illustration" => "images/bug-spray.png",
                 'label' => "Inspection antiparasitaire",
-                "label_en" => 'Pest inspection'
+                "label_en" => 'Pest inspection',
+                "description" => null,
+                "description_en" => null
             ],
 
             [
                 "parent_id" => 4,
                 "illustration" => "images/rubbish.png",
                 'label' => "Enlèvement des déchets mixtes",
-                "label_en" => 'Mixed waste removal'
+                "label_en" => 'Mixed waste removal',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 4,
                 "illustration" => "images/rubbish.png",
                 'label' => "Enlèvement des déchets verts",
-                "label_en" => 'Green waste removal'
+                "label_en" => 'Green waste removal',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 4,
                 "illustration" => "images/rubbish.png",
                 'label' => "Suppression des constructeurs",
-                "label_en" => 'Builders removal'
+                "label_en" => 'Builders removal',
+                "description" => null,
+                "description_en" => null
             ],
 
             [
                 "parent_id" => 5,
                 "illustration" => "images/handyman.png",
                 'label' => "Homme à tout faire",
-                "label_en" => 'Handyman'
+                "label_en" => 'Handyman',
+                "description" => null,
+                "description_en" => null
             ],
             [
                 "parent_id" => 5,
                 "illustration" => "images/handyman.png",
                 'label' => "Montage du téléviseur",
-                "label_en" => 'TV Mounting'
+                "label_en" => 'TV Mounting',
+                "description" => null,
+                "description_en" => null
             ],
 
         ]);

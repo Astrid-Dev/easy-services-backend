@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "20ae502d3422d1c4a6eb30f7101bcd0c",
+    "content-hash": "3d171c36c7b169b2ea17bc502459e1ac",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3204,6 +3204,69 @@
                 }
             ],
             "time": "2021-09-25T23:10:38+00:00"
+        },
+        {
+            "name": "reedware/laravel-relation-joins",
+            "version": "v3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tylernathanreed/laravel-relation-joins.git",
+                "reference": "943620791dbf991dda06963967b0aaa28445768c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tylernathanreed/laravel-relation-joins/zipball/943620791dbf991dda06963967b0aaa28445768c",
+                "reference": "943620791dbf991dda06963967b0aaa28445768c",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^7.30.4|^8.23|^9.0",
+                "illuminate/support": "^7.30.4|^8.23|^9.0",
+                "php": ">=7.2.5"
+            },
+            "require-dev": {
+                "illuminate/container": "^7.30.4|^8.23|^9.0",
+                "mockery/mockery": "^1.4.3",
+                "php-coveralls/php-coveralls": "^2.4",
+                "phpunit/phpunit": "^8.5|^9.5",
+                "squizlabs/php_codesniffer": "^3.6"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Reedware\\LaravelRelationJoins\\LaravelRelationJoinServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Reedware\\LaravelRelationJoins\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tyler Reed",
+                    "email": "tylernathanreed@gmail.com"
+                }
+            ],
+            "description": "Adds the ability to join on a relationship by name.",
+            "keywords": [
+                "eloquent",
+                "join",
+                "laravel",
+                "query",
+                "relation"
+            ],
+            "support": {
+                "issues": "https://github.com/tylernathanreed/laravel-relation-joins/issues",
+                "source": "https://github.com/tylernathanreed/laravel-relation-joins/tree/v3.0.0"
+            },
+            "time": "2022-02-09T15:28:12+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

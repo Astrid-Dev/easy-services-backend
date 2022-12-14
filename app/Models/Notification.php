@@ -11,6 +11,8 @@ class Notification extends Model
 
     protected $fillable = [
         'user_id',
+        'provider_id',
+        'organization_id',
         'reason',
         'data',
         'is_read'
@@ -21,6 +23,11 @@ class Notification extends Model
         return $this->belongsTo(User::class);
     }
     public function provider()
+    {
+        return $this->belongsTo(ServiceProvider::class);
+    }
+    
+    public function organization()
     {
         return $this->belongsTo(ServiceProvider::class);
     }

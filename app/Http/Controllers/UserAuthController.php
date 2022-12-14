@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\MultipartFormRequest;
 use App\Models\ServiceProvider;
+use App\Models\Organization;
 
 class UserAuthController extends Controller
 {
@@ -44,9 +45,9 @@ class UserAuthController extends Controller
      */
     public function register(Request $request) {
         $validator = Validator::make($request->all(), [
-            'username' => 'required|string|between:2,20|unique:users',
-            'names' => 'required|string|between:3,80|unique:users',
-            'phone_number' => 'required|string|between:9,18|unique:users',
+            'names' => 'sometimes|string|between:3,80|unique:users',
+            'phone_number' => 'sometimes|string|between:9,18|unique:users',
+            'username' => 'sometimes|string|between:2,20|unique:users',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|confirmed|between:6,20',
         ]);
@@ -80,8 +81,6 @@ class UserAuthController extends Controller
         $saved_path= ($searched_user->profile && $searched_user->profile !== '') ? $searched_user->profile : '';
 
         if ($profile = $request->file('profile')) {
-            $destinationPath = 'profiles';
-            $profile->move($destinationPath);
             $destinationPath = public_path().'/profiles/';
             $filename = $this->crypto_rand_secure().$profile->getClientOriginalExtension();
             $profile->move($destinationPath, $filename);
@@ -100,10 +99,7 @@ class UserAuthController extends Controller
 
         return response()->json([
             'message' => 'User successfully updated',
-            'user' => $searched_user,
-            'request' => $request->get("username"),
-            'reques' => $request->get("names"),
-            'requet' => $request->get("email")
+            'user' => $searched_user
         ], 201);
     }
 
@@ -199,12 +195,24 @@ class UserAuthController extends Controller
      */
     protected function createNewToken($token){
         $user = auth('simple_user')->user();
-        $provider = ServiceProvider::where('user_id', $user->id)->first();
-        if($provider){
-            $provider->applications = $provider->load('applications');
+
+        if($user && $user->role === 'PROVIDER'){
+            $provider = ServiceProvider::where('user_id', $user->id)->first();
+            if($provider){
+                $provider->applications = $provider->load('applications');
+            }
+            $user->is_provider = !empty($provider);
+            $user->provider = $provider;
         }
-        $user->is_provider = !empty($provider);
-        $user->provider = $provider;
+        else if($user && $user->role === 'ORGANIZATION'){
+            $organization = Organization::where('user_id', $user->id)->first();
+            if($organization){
+                $organization->applications = $organization->load('applications');
+            }
+            $user->is_organization = !empty($organization);
+            $user->organization = $organization;
+        }
+
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',

@@ -25,6 +25,7 @@ class User extends Authenticatable implements JWTSubject
         'phone_number',
         'profile',
         'password',
+        'role',
         'device_token'
     ];
 
@@ -35,8 +36,8 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $hidden = [
         'password',
+        'device_token'
     ];
-
      /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
@@ -57,5 +58,15 @@ class User extends Authenticatable implements JWTSubject
     public function enquiries()
     {
         return $this->hasMany(Enquiry::class);
+    }
+
+    public function provider()
+    {
+        return $this->hasOne(ServiceProvider::class);
+    }
+
+    public function organization()
+    {
+        return $this->hasOne(Organization::class);
     }
 }

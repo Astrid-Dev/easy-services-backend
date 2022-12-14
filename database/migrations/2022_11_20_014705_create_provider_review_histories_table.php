@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateServiceProvidersTable extends Migration
+class CreateProviderReviewHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,28 @@ class CreateServiceProvidersTable extends Migration
      */
     public function up()
     {
-        Schema::create('service_providers', function (Blueprint $table) {
+        Schema::create('provider_review_histories', function (Blueprint $table) {
             $table->id();
+            $table->decimal('review');
             $table->timestamps();
+
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('organization_id')->nullable();
+            $table->unsignedBigInteger('provider_id');
+            $table->unsignedBigInteger('enquiry_id');
 
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
 
-            $table->foreign('organization_id')
+            $table->foreign('provider_id')
                 ->references('id')
-                ->on('organizations')
+                ->on('providers')
+                ->onDelete('cascade');
+
+            $table->foreign('enquiry_id')
+                ->references('id')
+                ->on('enquiries')
                 ->onDelete('cascade');
         });
     }
@@ -38,6 +46,6 @@ class CreateServiceProvidersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('service_providers');
+        Schema::dropIfExists('provider_review_histories');
     }
 }

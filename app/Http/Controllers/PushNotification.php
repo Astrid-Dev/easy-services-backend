@@ -1,15 +1,24 @@
 <?php
 
+use App\Models\ServiceProvider;
 use App\Models\User;
 
 class PushNotification{
     public static function sendNotification($notificationData)
     {
         $url = 'https://fcm.googleapis.com/fcm/send';
+        $user_id = null;
+        if($notificationData->user_id){
+            $user_id = $notificationData->user_id;
+        }
+        else if($notificationData->provider_id){
+            $provider = ServiceProvider::find($notificationData->provider_id);
+            $user_id = $provider->user_id;
+        }
         $user = User::where('user_id', $notificationData->user_id)->first();
 
         if($user && $user->device_token){
-            $serverKey = env('BGi461zXgvpUs-scdHBlJMUPzEVx5M49wDOicGiGgPMpzuNprE0uHlTDw4QPg99pJGSzf0b88mO6t-KaW5mTt_g');
+            $serverKey = 'BGi461zXgvpUs-scdHBlJMUPzEVx5M49wDOicGiGgPMpzuNprE0uHlTDw4QPg99pJGSzf0b88mO6t-KaW5mTt_g';
 
             $data = [
                 "registration_ids" => $user->device_token,

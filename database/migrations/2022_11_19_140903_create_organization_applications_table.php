@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateServiceProvidersTable extends Migration
+class CreateOrganizationApplicationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,16 @@ class CreateServiceProvidersTable extends Migration
      */
     public function up()
     {
-        Schema::create('service_providers', function (Blueprint $table) {
+        Schema::create('organization_applications', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('organization_id')->nullable();
 
-            $table->foreign('user_id')
+            $table->unsignedBigInteger('service_id');
+            $table->unsignedBigInteger('organization_id');
+
+            $table->foreign('service_id')
                 ->references('id')
-                ->on('users')
+                ->on('services')
                 ->onDelete('cascade');
 
             $table->foreign('organization_id')
@@ -38,6 +39,6 @@ class CreateServiceProvidersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('service_providers');
+        Schema::dropIfExists('organization_applications');
     }
 }

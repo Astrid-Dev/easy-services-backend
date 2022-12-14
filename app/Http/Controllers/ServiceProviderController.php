@@ -6,7 +6,9 @@ use App\Models\ServiceProvider;
 use App\Models\ServiceProviderApplication;
 use App\Http\Requests\StoreServiceProviderRequest;
 use App\Http\Requests\UpdateServiceProviderRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Request;
 
 class ServiceProviderController extends Controller
 {
@@ -15,9 +17,24 @@ class ServiceProviderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $services_providers_list = ServiceProvider::paginate();
+        $services_providers_list = [];
+        $services_providers_list = isset($request->organization_id) ? ServiceProvider::where('organization_id', $request->organization_id)
+                                                : ServiceProvider::query();
+
+        if(isset($request->provider_name)){
+            $services_providers_list = $services_providers_list->joinRelation('user', function ($join) {
+                global $request;
+                $join->where('users.names', 'LIKE', "%$request->provider_name%");
+            });
+        }
+
+        $services_providers_list = $services_providers_list->paginate();
+        foreach($services_providers_list as $provider){
+            $provider->user = $provider->load('user');
+            $provider->applications = $provider->load('applications');
+        }
 
         return Response(json_encode($services_providers_list));
     }
@@ -44,9 +61,17 @@ class ServiceProviderController extends Controller
             'user_id' => 'required|integer|unique:service_providers',
         ]);
 
+        $user = User::findOrFail($request->user_id);
+        if($user->role !== 'SIMPLE_USER'){
+            abort(403);
+        }
+
         $service_provider = ServiceProvider::create(array_merge(
             $validator->validated()
         ));
+        
+        $user->role = 'PROVIDER';
+        $user->save();
 
         if($request->services){
             $services = explode(',', $request->services);
@@ -64,6 +89,7 @@ class ServiceProviderController extends Controller
         return Response(json_encode([
             'message' => 'Service provider created successfully !',
             'provider' => $service_provider,
+            'user' => $user,
             'applications' => $service_provider_applications
         ]), 201);
     }
