@@ -113,8 +113,8 @@ class OrganizationEmployeeController extends Controller
             $providers = $providers->where('id', '!=', $enquiry->service_provider_id);
 
             $enquiry_provider = $enquiry->service_provider_id ? ServiceProvider::findOrFail($enquiry->service_provider_id) : null;
-            if($enquiry_provider && $enquiry_provider->organization_id !== $request->organization_id){
-                abort(403, `This organization ($request->organization_id)  doesn't have rights to edit the given enquiry ($request->enquiry_id)`);
+            if($enquiry_provider && $enquiry_provider->organization_id !== intval($organization_id)){
+                abort(403, "This organization ($request->organization_id)  doesn't have rights to edit the given enquiry ($request->enquiry_id)");
             }
         }
 

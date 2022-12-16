@@ -186,6 +186,7 @@ class EnquiryController extends Controller
             $provider = ServiceProvider::find($searched_enquiry->service_provider_id);
             if($provider){
                 $provider->user = $provider->load('user');
+                $provider->organization = $provider->load('organization');
             }
             $searched_enquiry->service_provider = $provider;
         }
@@ -364,6 +365,7 @@ class EnquiryController extends Controller
         $provider = ServiceProvider::find($searched_enquiry->service_provider_id);
         if($provider){
             $provider->user = $provider->load('user');
+            $provider->organization = $provider->load('organization');
         }
         $searched_enquiry->service_provider = $provider;
         

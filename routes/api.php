@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\DashoardController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\EnquiryModificationHistoryController;
 use App\Http\Controllers\NotificationController;
@@ -70,6 +71,12 @@ Route::group([
     Route::get('/search_for_user', [OrganizationEmployeeController::class, 'search_for_user']);
     Route::get('/search_some_providers_for_request/{organization_id}', [OrganizationEmployeeController::class, 'search_some_providers_for_request']);
     Route::post('/register_new_employee', [OrganizationEmployeeController::class, 'register_new_employee']);
+});
+
+Route::group([
+    'prefix' => 'dashboard'
+], function ($router) {
+    Route::get('/organization/{organization_id}', [DashoardController::class, 'organization_dashboard']);
 });
 
 ///////////////////////////////////////////////////////////////////////////////

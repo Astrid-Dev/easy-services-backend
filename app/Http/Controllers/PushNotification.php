@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Http\Controllers;
+
 use App\Models\ServiceProvider;
 use App\Models\User;
 
@@ -15,7 +17,7 @@ class PushNotification{
             $provider = ServiceProvider::find($notificationData->provider_id);
             $user_id = $provider->user_id;
         }
-        $user = User::where('user_id', $notificationData->user_id)->first();
+        $user = User::where('id', $notificationData->user_id)->first();
 
         if($user && $user->device_token){
             $serverKey = 'BGi461zXgvpUs-scdHBlJMUPzEVx5M49wDOicGiGgPMpzuNprE0uHlTDw4QPg99pJGSzf0b88mO6t-KaW5mTt_g';
