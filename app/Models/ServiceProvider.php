@@ -42,4 +42,19 @@ class ServiceProvider extends Model
         return floatval($temp->sum('final_price'));
     }
 
+    public function statistics(){
+        $statistics = [];
+        $statistics = EnquiryModificationHistory::select('state')->distinct()->get();
+        foreach($statistics as $stat){
+            $stat->total = EnquiryModificationHistory::where('state', $stat->state)->where('service_provider_id', $this->id)->count();
+            if($stat->state === 0)
+            {
+                $stat->total1 = EnquiryModificationHistory::where('state', $stat->state)->where('service_provider_id', $this->id)->where('author', 'user')->count();
+                $stat->total2 = EnquiryModificationHistory::where('state', $stat->state)->where('service_provider_id', $this->id)->where('author', 'provider')->count();
+            }
+        }
+
+        return $statistics;
+    }
+
 }

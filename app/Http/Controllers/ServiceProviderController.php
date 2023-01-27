@@ -103,6 +103,9 @@ class ServiceProviderController extends Controller
     public function show($id)
     {
         $searched_service_provider = ServiceProvider::findOrFail($id);
+        $searched_service_provider->rating = $searched_service_provider->rating();
+        $searched_service_provider->total_profit = $searched_service_provider->total_profit();
+        $searched_service_provider->statistics = $searched_service_provider->statistics();
 
         return Response(json_encode($searched_service_provider));
     }
